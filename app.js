@@ -6,7 +6,9 @@ const middleware = require("./utilities/middleware");
 
 const noticesRouter = require("./controllers/notices");
 const imagesRouter = require("./controllers/images");
+
 app.use(cors());
+app.use(express.static("build"));
 app.use(express.json());
 app.use(middleware.requestLogger);
 

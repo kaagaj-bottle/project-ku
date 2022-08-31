@@ -3,11 +3,19 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const middleware = require("./utilities/middleware");
+const logger = require("./utilities/logger");
+const mongoose = require("mongoose");
+require("express-async-errors");
 
-const noticesRouter = require("./controllers/notices");
-const imagesRouter = require("./controllers/images");
+mongoose
+  .connect(config.MONGODB_URI)
+  .then(() => {
+    logger.info("connected to MongoDB");
+  })
+  .catch((error) => {
+    logger.error("error connection to MongoDB:", error.message);
+  });
 
-app.use(cors());
 app.use(express.static("build"));
 app.use(express.json());
 app.use(middleware.requestLogger);

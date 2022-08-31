@@ -2,4 +2,8 @@ const info = (...message) => {
   console.log(message);
 };
 
-module.exports = { info };
+const error = (...message) => {
+  console.error(message);
+};
+
+module.exports = { info, error };

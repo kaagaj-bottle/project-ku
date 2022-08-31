@@ -4,6 +4,7 @@ const noticeSchema = new mongoose.Schema({
   title: String,
   date: Date,
   pdfLink: String,
+  postedBy: String,
 });
 
 noticeSchema.set("toJSON", {

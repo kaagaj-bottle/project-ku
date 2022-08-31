@@ -7,12 +7,13 @@ noticesRouter.get("/", async (request, response) => {
 });
 
 noticesRouter.post("/", async (request, response) => {
-  const { title, pdfLink } = request.body;
+  const { title, pdfLink, postedBy } = request.body;
   console.log(request.body);
   const notice = new Notice({
     title: title,
     pdfLink: pdfLink,
     date: new Date(),
+    postedBy: postedBy,
   });
 
   const savedNotice = await notice.save();

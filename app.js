@@ -10,6 +10,7 @@ require("express-async-errors");
 const noticesRouter = require("./controllers/notices");
 const imagesRouter = require("./controllers/images");
 const membersRouter = require("./controllers/members");
+const loginRouter = require("./controllers/login");
 
 mongoose
   .connect(config.MONGODB_URI)
@@ -27,6 +28,7 @@ app.use(middleware.requestLogger);
 app.use("/api/notices", noticesRouter);
 app.use("/api/images", imagesRouter);
 app.use("/api/members", membersRouter);
+app.use("/api/login", loginRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

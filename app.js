@@ -7,6 +7,9 @@ const logger = require("./utilities/logger");
 const mongoose = require("mongoose");
 require("express-async-errors");
 
+const noticesRouter = require("./controllers/notices");
+const imagesRouter = require("./controllers/images");
+
 mongoose
   .connect(config.MONGODB_URI)
   .then(() => {

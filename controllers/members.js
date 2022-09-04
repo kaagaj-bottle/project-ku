@@ -1,6 +1,16 @@
 const bcrypt = require("bcrypt");
 const membersRouter = require("express").Router();
 const Member = require("../models/member");
+const config = require("../utilities/config");
+const jwt = require("jsonwebtoken");
+const getToken = (request) => {
+  const authorization = request.get("authorization");
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    return authorization.substring(7);
+  } else {
+    return null;
+  }
+};
 
 membersRouter.get("/", async (request, response) => {
   const members = await Member.find({});
@@ -35,6 +45,23 @@ membersRouter.post("/", async (request, response) => {
   const savedMember = await member.save();
 
   response.status(201).json(savedMember);
+});
+
+membersRouter.delete("/:id", async (request, response) => {
+  const id = request.params.id;
+  const token = getToken(request);
+  const decodedToken = jwt.verify(token, config.SECRET_STRING);
+
+  if (!token || !decodedToken.id || !(decodedToken.id === id)) {
+    return response.status(401).end();
+  }
+
+  try {
+    await Member.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  } catch {
+    response.status(404).end();
+  }
 });
 
 module.exports = membersRouter;

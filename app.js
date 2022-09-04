@@ -25,6 +25,7 @@ app.use(express.static("build"));
 app.use(express.json());
 app.use(middleware.requestLogger);
 
+app.use(cors());
 app.use("/api/notices", noticesRouter);
 app.use("/api/images", imagesRouter);
 app.use("/api/members", membersRouter);

@@ -19,11 +19,10 @@ noticesRouter.get("/", async (request, response) => {
 });
 
 noticesRouter.post("/", async (request, response) => {
-  console.log("hello");
   const { title, pdfLink } = request.body;
 
   const token = getToken(request);
-  console.log(token);
+
   const decodedToken = jwt.verify(token, config.SECRET_STRING);
 
   if (!token || !decodedToken.id) {
@@ -41,6 +40,23 @@ noticesRouter.post("/", async (request, response) => {
 
   const savedNotice = await notice.save();
   response.status(201).json(savedNotice);
+});
+
+noticesRouter.delete("/:id", async (request, response) => {
+  const token = getToken(request);
+  const id = request.params.id;
+  const decodedToken = jwt.verify(token, config.SECRET_STRING);
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  try {
+    await Notice.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  } catch {
+    response.status(400).end();
+  }
 });
 
 module.exports = noticesRouter;

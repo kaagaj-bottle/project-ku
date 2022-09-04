@@ -2,8 +2,9 @@ const noticesRouter = require("express").Router();
 const config = require("../utilities/config");
 const Member = require("../models/member");
 const Notice = require("../models/notice");
+const ActionLog = require("../models/actionLog");
 const jwt = require("jsonwebtoken");
-
+const logger = require("../utilities/logger");
 const getToken = (request) => {
   const authorization = request.get("authorization");
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
@@ -48,6 +49,10 @@ noticesRouter.post("/", async (request, response) => {
   });
 
   const savedNotice = await notice.save();
+  const noticeLog = new ActionLog(
+    logger.setNoticeActionString(savedNotice, "post", member.username)
+  );
+  await noticeLog.save();
   response.status(201).json(savedNotice);
 });
 
@@ -61,10 +66,20 @@ noticesRouter.delete("/:id", async (request, response) => {
   }
 
   try {
+    const noticeToBeRemoved = await Notice.findById(request.params.id);
+    const noticeLog = new ActionLog(
+      logger.setNoticeActionString(
+        noticeToBeRemoved,
+        "deletion",
+        decodedToken.username
+      )
+    );
+    await noticeLog.save();
+
     await Notice.findByIdAndRemove(request.params.id);
     response.status(204).end();
   } catch {
-    response.status(400).end();
+    response.status(404).end();
   }
 });
 

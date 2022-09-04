@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const actionLogSchema = mongoose.Schema({
-  actionTitle: String,
+  actionContent: String,
+  actionSubject: String,
   actionDoer: String,
   date: Date,
 });
@@ -14,4 +15,4 @@ actionLogSchema.set("toJSON", {
   },
 });
 
-module.exports = mongoose.model("ActionLog", memberSchema);
+module.exports = mongoose.model("ActionLog", actionLogSchema);

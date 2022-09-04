@@ -18,6 +18,15 @@ noticesRouter.get("/", async (request, response) => {
   response.json(notices);
 });
 
+noticesRouter.get("/:id", async (request, response) => {
+  try {
+    const notice = await Notice.findById(request.params.id);
+    response.json(notice);
+  } catch {
+    response.status(404).end();
+  }
+});
+
 noticesRouter.post("/", async (request, response) => {
   const { title, pdfLink } = request.body;
 

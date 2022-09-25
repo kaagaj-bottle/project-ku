@@ -3,14 +3,7 @@ const membersRouter = require("express").Router();
 const Member = require("../models/member");
 const config = require("../utilities/config");
 const jwt = require("jsonwebtoken");
-const getToken = (request) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-    return authorization.substring(7);
-  } else {
-    return null;
-  }
-};
+const commonFuncs = require("../utilities/commonFuncs");
 
 membersRouter.get("/", async (request, response) => {
   const members = await Member.find({});
@@ -50,7 +43,7 @@ membersRouter.post("/", async (request, response) => {
 
 membersRouter.delete("/:id", async (request, response) => {
   const id = request.params.id;
-  const token = getToken(request);
+  const token = commonFuncs.getToken(request);
   const decodedToken = jwt.verify(token, config.SECRET_STRING);
 
   if (!token || !decodedToken.id || !(decodedToken.isRootMember === true)) {

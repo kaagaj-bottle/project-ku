@@ -5,14 +5,7 @@ const Notice = require("../models/notice");
 const ActionLog = require("../models/actionLog");
 const jwt = require("jsonwebtoken");
 const logger = require("../utilities/logger");
-const getToken = (request) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-    return authorization.substring(7);
-  } else {
-    return null;
-  }
-};
+const commonFuncs = require("../utilities/commonFuncs");
 
 noticesRouter.get("/", async (request, response) => {
   const notices = await Notice.find({});
@@ -31,12 +24,16 @@ noticesRouter.get("/:id", async (request, response) => {
 noticesRouter.post("/", async (request, response) => {
   const { title, pdfLink } = request.body;
 
-  const token = getToken(request);
+  const token = commonFuncs.getToken(request);
 
   const decodedToken = jwt.verify(token, config.SECRET_STRING);
 
   if (!token || !decodedToken.id) {
     return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  if (!title || !pdfLink) {
+    return response.status(401).json({ error: "input field missing" });
   }
 
   const member = await Member.findById(decodedToken.id);
@@ -57,7 +54,7 @@ noticesRouter.post("/", async (request, response) => {
 });
 
 noticesRouter.delete("/:id", async (request, response) => {
-  const token = getToken(request);
+  const token = commonFuncs.getToken(request);
   const id = request.params.id;
   const decodedToken = jwt.verify(token, config.SECRET_STRING);
 

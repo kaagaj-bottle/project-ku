@@ -39,7 +39,7 @@ aboutPageCardsRouter.delete("/:id", async (request, response) => {
   }
 
   try {
-    await Notice.findByIdAndRemove(request.params.id);
+    await AboutPageCard.findByIdAndRemove(request.params.id);
     response.status(204).end();
   } catch {
     response.status(404).end();

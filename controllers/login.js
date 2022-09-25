@@ -20,7 +20,11 @@ loginRouter.post("/", async (request, response) => {
   }
 
   const token = jwt.sign(
-    { username: member.username, id: member._id },
+    {
+      username: member.username,
+      id: member._id,
+      isRootMember: member.isRootMember,
+    },
     config.SECRET_STRING
   );
 

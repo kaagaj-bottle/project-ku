@@ -29,4 +29,21 @@ aboutPageCardsRouter.post("/", async (request, response) => {
   response.status(201).json(savedCard);
 });
 
+aboutPageCardsRouter.delete("/:id", async (request, response) => {
+  const token = commonFuncs.getToken(request);
+  const id = request.params.id;
+  const decodedToken = jwt.verify(token, config.SECRET_STRING);
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  try {
+    await Notice.findByIdAndRemove(request.params.id);
+    response.status(204).end();
+  } catch {
+    response.status(404).end();
+  }
+});
+
 module.exports = aboutPageCardsRouter;

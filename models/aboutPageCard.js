@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const aboutPageCardSchema = mongoose.Schema({
-  header: String,
-  captions: String,
+  heading: String,
+  caption: String,
   additionalText: String,
 });
 

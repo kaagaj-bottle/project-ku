@@ -12,6 +12,7 @@ const imagesRouter = require("./controllers/images");
 const membersRouter = require("./controllers/members");
 const loginRouter = require("./controllers/login");
 const actionLogsRouter = require("./controllers/actionLogs");
+const aboutPageCardsRouter = require("./controllers/aboutPageCards");
 
 mongoose
   .connect(config.MONGODB_URI)
@@ -32,6 +33,7 @@ app.use("/api/images", imagesRouter);
 app.use("/api/members", membersRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/actionlogs", actionLogsRouter);
+app.use("/api/about-page-cards", aboutPageCardsRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

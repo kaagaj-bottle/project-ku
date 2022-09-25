@@ -18,9 +18,10 @@ membersRouter.get("/", async (request, response) => {
 });
 
 membersRouter.post("/", async (request, response) => {
-  const { username, name, faculty, post, isRootMember, password } =
-    request.body;
+  let { username, name, faculty, post, isRootMember, password } = request.body;
 
+  const memberCount = await Member.count({});
+  isRootMember = memberCount === 0;
   const existingMember = await Member.findOne({ username });
 
   if (existingMember) {
@@ -52,7 +53,7 @@ membersRouter.delete("/:id", async (request, response) => {
   const token = getToken(request);
   const decodedToken = jwt.verify(token, config.SECRET_STRING);
 
-  if (!token || !decodedToken.id || !(decodedToken.id === id)) {
+  if (!token || !decodedToken.id || !(decodedToken.isRootMember === true)) {
     return response.status(401).end();
   }
 

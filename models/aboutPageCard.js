@@ -4,6 +4,7 @@ const aboutPageCardSchema = mongoose.Schema({
   heading: String,
   caption: String,
   additionalText: String,
+  imageLink: String,
 });
 
 aboutPageCardSchema.set("toJSON", {

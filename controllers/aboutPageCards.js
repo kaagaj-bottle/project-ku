@@ -10,9 +10,8 @@ aboutPageCardsRouter.get("/", async (request, response) => {
 });
 
 aboutPageCardsRouter.post("/", async (request, response) => {
-  let { heading, caption, additionalText } = request.body;
+  let { heading, caption, additionalText, imageLink } = request.body;
   const token = commonFuncs.getToken(request);
-  console.log(token);
   const decodedToken = jwt.verify(token, config.SECRET_STRING);
 
   if (!token || !decodedToken.id) {
@@ -23,6 +22,7 @@ aboutPageCardsRouter.post("/", async (request, response) => {
     heading,
     caption,
     additionalText,
+    imageLink,
   });
 
   const savedCard = await aboutPageCard.save();

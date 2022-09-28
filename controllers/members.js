@@ -4,13 +4,16 @@ const Member = require("../models/member");
 const config = require("../utilities/config");
 const jwt = require("jsonwebtoken");
 const commonFuncs = require("../utilities/commonFuncs");
+const multer = require("../multer");
+const path = require("path");
+const fs = require("fs");
 
 membersRouter.get("/", async (request, response) => {
   const members = await Member.find({});
   response.json(members);
 });
 
-membersRouter.post("/", async (request, response) => {
+membersRouter.post("/", multer.upload.single(), async (request, response) => {
   let { username, name, faculty, post, isRootMember, password } = request.body;
 
   const memberCount = await Member.count({});
@@ -34,6 +37,16 @@ membersRouter.post("/", async (request, response) => {
     post,
     isRootMember,
     passwordHash,
+    image: {
+      data: fs.readFileSync(
+        path.join(
+          __dirname.replace("/controllers", "") +
+            "/uploads/" +
+            request.file.filename
+        )
+      ),
+      contentType: "image/png",
+    },
   });
 
   const savedMember = await member.save();

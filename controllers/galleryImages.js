@@ -33,6 +33,7 @@ galleryImagesRouter.post(
               request.file.filename
           )
         ),
+        contentType: "image/png",
       },
     };
 

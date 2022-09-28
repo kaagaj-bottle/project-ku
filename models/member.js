@@ -7,6 +7,10 @@ const memberSchema = mongoose.Schema({
   post: String,
   isRootMember: Boolean,
   passwordHash: String,
+  image: {
+    data: Buffer,
+    contentType: String,
+  },
 });
 
 memberSchema.set("toJSON", {

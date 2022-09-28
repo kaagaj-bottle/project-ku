@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
 const galleryImageSchema = mongoose.Schema({
-  imageLink: String,
+  image: {
+    data: Buffer,
+    contentType: String,
+  },
   caption: String,
 });
 
